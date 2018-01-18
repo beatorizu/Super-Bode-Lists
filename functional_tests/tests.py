@@ -64,8 +64,8 @@ class NewVisitorTest(LiveServerTestCase):
         input_box.send_keys(Keys.ENTER)
 
         # A página é atualizada novamente e agora mostra os dois itens de sua lista
-        self.wait_for_row_in_list_table('1: Buy peacock feathers')
         self.wait_for_row_in_list_table('2: Use peacock feathers to make a fly')
+        self.wait_for_row_in_list_table('1: Buy peacock feathers')
 
         # Satisfeita ela volta a dormir
 
@@ -103,10 +103,11 @@ class NewVisitorTest(LiveServerTestCase):
 
         # Francis obtém seu próprio URL exclusivo
         francis_list_url = self.browser.current_url
-        self.assertRegex(francis_list_url, edith_list_url)
+        self.assertRegex(francis_list_url, '/lists/.+')
+        self.assertNotEqual(francis_list_url, edith_list_url)
 
         # Novamente, não há nenhum sinal da lista de Edith
-        page_text = self.find_element_by_tag_name('body').text
+        page_text = self.browser.find_element_by_tag_name('body').text
         self.assertNotIn('Buy peacock feathers', page_text)
         self.assertIn('Buy milk', page_text)
 
